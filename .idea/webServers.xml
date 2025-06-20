@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="aa3e1c20-8bfc-4d4c-9004-14e73d4fa421" name="intra-tiron" url="http://pdv.tcloupiac.fr">
+        <fileTransfer rootFolder="/home/fabien/tcl/" accessType="SFTP" host="intra.tiron.fr" port="22" sshConfigId="a28acd86-1387-4842-99df-2dabee15a812" sshConfig="fabien@intra.tiron.fr:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

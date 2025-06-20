@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="intra.tiron.fr" id="a28acd86-1387-4842-99df-2dabee15a812" keyPath="$USER_HOME$/.ssh/id_rsa" port="22" nameFormat="DESCRIPTIVE" username="fabien" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
