@@ -3,6 +3,7 @@
 	import { panierSerialise, quantiteDansPanier, videDuPanier, videPanier } from '$lib/panier.svelte';
 	import type { Article } from '$lib/types';
 	import { onMount, tick } from 'svelte';
+	import Chargeur from '$lib/Chargeur.svelte';
 
 	let articles: Article[] = $state([]);
 
@@ -54,7 +55,7 @@
 </script>
 
 <div class="chargement-articles" class:active={!articlesCharges}>
-	<span class="chargeur"></span>
+	<Chargeur/>
 	<p>Chargement des articles…</p>
 </div>
 <div class="contenu-principal" class:active={articlesCharges}>
@@ -107,42 +108,11 @@
 
     p {
       font-size: 18px;
-    }
-
-    .chargeur {
-
-      box-sizing: border-box;
-      position: relative;
-      width: 48px;
-      height: 48px;
-      animation: spin 1s linear infinite;
-
-      &:after, &:before {
-        content: "";
-        width: 24px;
-        height: 24px;
-        position: absolute;
-        border-radius: 50%;
-        background: #c76131;
-        animation: spin 1s linear infinite;
-        transform-origin: 0 100%;
-      }
-
-      &:before {
-        transform-origin: 0 50%;
-        background: #015335;
-      }
-
+			margin-bottom: 36px;
     }
 
     &.active {
       display: flex;
-    }
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
     }
   }
 
