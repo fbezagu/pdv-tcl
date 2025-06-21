@@ -1,9 +1,10 @@
 <script lang="ts">
 	import BoutonAjout from '$lib/BoutonAjout.svelte';
-	import { panierSerialise, quantiteDansPanier, videDuPanier, videPanier } from '$lib/panier.svelte';
+	import { modePaiement, panierSerialise, quantiteDansPanier, videDuPanier, videPanier } from '$lib/panier.svelte';
 	import type { Article } from '$lib/types';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import Chargeur from '$lib/Chargeur.svelte';
+	import ModesPaiement from '$lib/ModesPaiement.svelte';
 
 	let articles: Article[] = $state([]);
 
@@ -25,10 +26,8 @@
 	const valider = async () => {
 		envoiEnCours = true;
 		// await new Promise((resolve) => setTimeout(resolve, 500));
-		await fetch('/ventes', {
-			method: 'POST',
-			body: panierSerialise()
-		});
+		// await fetch('/ventes', { method: 'POST', body: panierSerialise() });
+		console.log(panierSerialise());
 		envoiEnCours = false;
 		afficheSucces = true;
 	};
@@ -52,10 +51,12 @@
 			return quantiteDansPanier(article.id) > 0;
 		}))
 	;
+
+	let nonValide = $derived(!modePaiement.courant);
 </script>
 
 <div class="chargement-articles" class:active={!articlesCharges}>
-	<Chargeur/>
+	<Chargeur />
 	<p>Chargement des articles…</p>
 </div>
 <div class="contenu-principal" class:active={articlesCharges}>
@@ -75,7 +76,9 @@
 		</div>
 	{/each}
 	Total : {enEuros(totalPanier())}
-	<button onclick={valider} disabled={envoiEnCours}>Valider</button>
+	<ModesPaiement />
+
+	<button onclick={valider} disabled={envoiEnCours || nonValide}>Valider</button>
 	<button onclick={vider}>Vider</button>
 	<div class="succes" class:afficheSucces>
 		Panier envoyé
@@ -108,7 +111,7 @@
 
     p {
       font-size: 18px;
-			margin-bottom: 36px;
+      margin-bottom: 36px;
     }
 
     &.active {

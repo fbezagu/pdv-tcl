@@ -7,8 +7,24 @@ export const quantiteDansPanier = (idArticle: string) => panier[idArticle] || 0;
 
 export const videDuPanier = (idArticle: string) => (panier[idArticle] = 0);
 
-export const panierSerialise = () => JSON.stringify({ articles: panier });
+export const panierSerialise = () =>
+	JSON.stringify({
+		articles: panier,
+		mode: modePaiement.courant
+	});
 
 export const videPanier = () => {
 	panier = {};
+	modePaiement.courant = undefined
 };
+
+type IdModePaiement = 'CB'| 'CHQ'| 'ESP'| 'CARTB';
+
+export const modesPaiement: Record<IdModePaiement, string> = {
+	CB: 'Carte bleue',
+	ESP: 'Espèces',
+	CHQ: 'Chèque',
+	CARTB: 'Carte boisson'
+};
+
+export const modePaiement = $state({ courant: undefined });

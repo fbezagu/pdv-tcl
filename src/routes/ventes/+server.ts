@@ -9,23 +9,26 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const date = new Date();
 	const idPanier = uuidv4();
-	const mode = 'CB';
 
 	const panier = await request.json();
-	const articles = panier.articles;
-	const ventes = Object.keys(articles).map((idArticle) => ({
-		id: idArticle,
-		quantite: articles[idArticle],
-		idPanier,
-		date,
-		mode
-	}));
+	const { articles, mode } = panier;
+	const ventes = Object.keys(articles)
+		.filter((idArticle) => articles[idArticle] > 0)
+		.map((idArticle) => ({
+			id: idArticle,
+			quantite: articles[idArticle],
+			idPanier,
+			date,
+			mode
+		}));
 
-	await axios.post(urlApiFeuille, ventes, {
-		auth: {
-			username: env.STEINHQ_UTILISATEUR,
-			password: env.STEINHQ_MOT_PASSE
-		}
-	});
+	if (ventes.length > 0) {
+		await axios.post(urlApiFeuille, ventes, {
+			auth: {
+				username: env.STEINHQ_UTILISATEUR,
+				password: env.STEINHQ_MOT_PASSE
+			}
+		});
+	}
 	return text('ok');
 };
