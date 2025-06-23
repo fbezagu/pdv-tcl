@@ -7,3 +7,4 @@
 	const incremente = () => ajouteAuPanier(idArticle, increment);
 </script>
 <button onclick={incremente}>+{increment}</button>
+
