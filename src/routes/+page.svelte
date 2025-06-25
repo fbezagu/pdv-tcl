@@ -61,9 +61,6 @@
 			{/each}
 		</section>
 		<section>
-			<div>
-				Total : {enEuros(totalPanier())}
-			</div>
 			<ModesPaiement />
 		</section>
 		<section>
@@ -77,7 +74,12 @@
 	<footer class:active={articlesCharges}>
 		<button class="vider" onclick={vider} aria-label="Vider le panier" title="Vider le panier"><span
 			class="icone"></span></button>
-		<button class="valider" onclick={valider} disabled={envoiEnCours || nonValide}>Envoyer</button>
+		<button class="valider" onclick={valider} disabled={envoiEnCours || nonValide}>
+			Envoyer
+			{#if totalPanier() > 0}
+				({enEuros(totalPanier())})
+			{/if}
+		</button>
 	</footer>
 </div>
 
