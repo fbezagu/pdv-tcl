@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { Article } from '$lib/types';
-	import { quantiteDansPanier } from '$lib/panier.svelte';
+	import { ajouteAuPanier, quantiteDansPanier } from '$lib/panier.svelte';
 
 	export let article: Article;
+	const incremente = () => ajouteAuPanier(article.id, 1);
+
 </script>
 
-<button class="article">
+<button class="contenu article" onclick={incremente}>
 	<span class={`icone ${article.id}`}></span>
 	<span class="nom">{article.nom}</span>
 	<span class="quantite"> {quantiteDansPanier(article.id)}</span>
@@ -28,21 +30,22 @@
 
   .article {
     border: 1px solid red;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
+		align-items: center;
+		gap: 8px;
     padding: 10px;
-		width: 100px;
-		height: 100px;
+    height: 156px;
+
+    .nom {
+      font-size: 12px;
+      color: #0d0d0d;
+    }
+
+    .quantite {
+      font-size: 12px;
+      color: #2461ae;
+    }
   }
-
-	.nom{
-		font-size: 12px;
-		color: #0d0d0d;
-	}
-
-	.quantite {
-		font-size: 12px;
-		color: #2461ae;
-	}
 
 </style>

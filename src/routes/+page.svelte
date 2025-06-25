@@ -1,11 +1,11 @@
 <script lang="ts">
-	import BoutonAjout from '$lib/BoutonAjout.svelte';
-	import { modePaiement, panierSerialise, quantiteDansPanier, videDuPanier, videPanier } from '$lib/panier.svelte';
+	import { modePaiement, panierSerialise, quantiteDansPanier, videPanier } from '$lib/panier.svelte';
 	import type { Article } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Chargeur from '$lib/Chargeur.svelte';
 	import ModesPaiement from '$lib/ModesPaiement.svelte';
 	import TuileArticle from '$lib/TuileArticle.svelte';
+	import { chargeArticles } from '$lib/articles';
 
 	let articles: Article[] = $state([]);
 
@@ -41,52 +41,9 @@
 	};
 
 	onMount(async () => {
-		// let reponse = await fetch('/articles');
-		// articles = await reponse.json() as Article[];
-		articles = [
-			{
-				'id': 'biere',
-				'nom': 'Bière',
-				'prix': 2
-			},
-			{
-				'id': 'canette',
-				'nom': 'Canette / bière bouteille',
-				'prix': 2
-			},
-			{
-				'id': 'eau',
-				'nom': 'Bouteille Eau 1,5L',
-				'prix': 1
-			},
-			{
-				'id': 'carte-boisson',
-				'nom': 'Carte boisson (10 + 1GT)',
-				'prix': 20
-			},
-			{
-				'id': 'cafe',
-				'nom': 'Café',
-				'prix': 1
-			},
-			{
-				'id': 'sandwich',
-				'nom': 'Petite brasserie (frites, sandwich, panini, hotdog)',
-				'prix': 3
-			},
-			{
-				'id': 'glace',
-				'nom': 'Glace',
-				'prix': 2
-			}
-		];
+		articles = await chargeArticles();
 		articlesCharges = true;
 	});
-
-	let articlesVendus: Article[] = $derived(articles.filter(article => {
-			return quantiteDansPanier(article.id) > 0;
-		}))
-	;
 
 	let nonValide = $derived(!modePaiement.courant);
 </script>
@@ -98,23 +55,15 @@
 
 <div class="conteneur">
 	<main class:active={articlesCharges}>
-		<section>
+		<section class="articles">
 			{#each articles as article(article.id)}
-				<div>
-					<TuileArticle {article} />
-					<BoutonAjout idArticle={article.id} increment={1} />
-					<BoutonAjout idArticle={article.id} increment={2} />
-					<BoutonAjout idArticle={article.id} increment={5} />
-					<button onclick={()=>videDuPanier(article.id)}>0</button>
-				</div>
+				<TuileArticle {article} />
 			{/each}
-			{#each articlesVendus as article(article.id)}
-				<div>
-					{article.nom} {enEuros(article.prix)} x {quantiteDansPanier(article.id)}
-					= {enEuros(quantiteDansPanier(article.id) * article.prix)}
-				</div>
-			{/each}
-			Total : {enEuros(totalPanier())}
+		</section>
+		<section>
+			<div>
+				Total : {enEuros(totalPanier())}
+			</div>
 			<ModesPaiement />
 		</section>
 		<section>
@@ -254,6 +203,12 @@
         }
       }
     }
+  }
+
+  .articles {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(156px, 1fr) );
+    gap: 16px
   }
 
 </style>
