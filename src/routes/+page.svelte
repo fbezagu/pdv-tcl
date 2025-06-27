@@ -55,13 +55,13 @@
 
 <div class="conteneur">
 	<main class:active={articlesCharges}>
+		<section>
+			<ModesPaiement />
+		</section>
 		<section class="articles">
 			{#each articles as article(article.id)}
 				<TuileArticle {article} />
 			{/each}
-		</section>
-		<section>
-			<ModesPaiement />
 		</section>
 		<section>
 			<div class="succes" class:afficheSucces>
@@ -89,6 +89,7 @@
     body {
       font-family: Lato, sans-serif;
       font-size: 16px;
+			color: #222;
       padding: 0;
       margin: 0;
       height: 100vh;
