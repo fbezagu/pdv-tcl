@@ -92,8 +92,6 @@
 			color: #222;
       padding: 0;
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
     }
   }
 
@@ -124,14 +122,9 @@
   }
 
   .conteneur {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
 
     main {
       display: none;
-      flex: 1;
-      overflow: auto;
       padding: 16px;
 
       &.active {
@@ -141,7 +134,6 @@
 
     section {
       width: 100%;
-      overflow: auto;
     }
 
     footer {
