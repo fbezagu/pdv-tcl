@@ -12,12 +12,13 @@
 	import ModesPaiement from '$lib/ModesPaiement.svelte';
 	import TuileArticle from '$lib/TuileArticle.svelte';
 	import { chargeArticles } from '$lib/articles';
+	import Toast from '$lib/Toast.svelte';
 
 	let articles: Article[] = $state([]);
 
 	let articlesCharges = $state(false);
 	let envoiEnCours = $state(false);
-	let afficheSucces = $state(false);
+	let toastSucces: Toast;
 
 	const enEuros = (montant: number) => {
 		return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(montant);
@@ -33,7 +34,8 @@
 		envoiEnCours = true;
 		await fetch('/ventes', { method: 'POST', body: panierSerialise() });
 		envoiEnCours = false;
-		afficheSucces = true;
+		toastSucces.affiche();
+		videPanier();
 	};
 
 	const vider = () => {
@@ -68,6 +70,11 @@
 
 <div class="conteneur">
 	<main class:active={articlesCharges}>
+		<Toast
+			titre="Panier envoyé"
+			description="Le panier a été correctement envoyé. Un nouveau panier est prêt. "
+			bind:this={toastSucces}
+		/>
 		<section>
 			<ModesPaiement />
 		</section>
