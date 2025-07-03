@@ -9,9 +9,16 @@ type ArticleGSheet = {
 	Prix: string;
 	Compte: string;
 	Actif: string;
+	CHQ: string;
+	CB: string;
+	ESP: string;
+	CARTB: string;
 };
 
-export const GET: RequestHandler = async ({ request }) => {
+type ModePaiement = 'ESP' | 'CHQ' | 'CARTB' | 'CB';
+const modesPaiement: ModePaiement[] = ['CHQ', 'CB', 'CARTB', 'ESP'];
+
+export const GET: RequestHandler = async () => {
 	const urlApiFeuille = `${env.STEINHQ_URL}Articles`;
 
 	const reponse = await axios.get(urlApiFeuille, {
@@ -21,6 +28,12 @@ export const GET: RequestHandler = async ({ request }) => {
 		}
 	});
 
+	const modesPaiementAutorises = (source: ArticleGSheet) =>
+		modesPaiement.reduce(
+			(acc, p) => (source[p] === 'TRUE' ? [...acc, p] : acc),
+			[] as ModePaiement[]
+		);
+
 	const articlesGSheet = reponse.data as ArticleGSheet[];
 	const articles = articlesGSheet
 		.filter((a) => a.Id)
@@ -28,7 +41,8 @@ export const GET: RequestHandler = async ({ request }) => {
 			id: source.Id,
 			nom: source.Nom,
 			prix: parseInt(source.Prix.slice(0, -1)),
-			actif: source.Actif === 'TRUE'
+			actif: source.Actif === 'TRUE',
+			modesPaiementAutorises: modesPaiementAutorises(source)
 		}))
 		.filter((a) => a.actif);
 	return json(articles);

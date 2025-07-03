@@ -1,3 +1,5 @@
+import type { IdModePaiement } from '$lib/types';
+
 let panier: { [idArticle: string]: number } = $state({});
 
 export const ajouteAuPanier = (idArticle: string, quantite: number) =>
@@ -17,8 +19,6 @@ export const videPanier = () => {
 	panier = {};
 	modePaiement.courant = undefined
 };
-
-type IdModePaiement = 'CB'| 'CHQ'| 'ESP'| 'CARTB';
 
 export const modesPaiement: Record<IdModePaiement, string> = {
 	CB: 'Carte bleue',
