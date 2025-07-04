@@ -94,6 +94,9 @@
 			{#if totalPanier() > 0}
 				({enEuros(totalPanier())})
 			{/if}
+			{#if envoiEnCours}
+				<span class="svg-spinners--gooey-balls-2"></span>
+				{/if}
 		</button>
 	</footer>
 </div>
@@ -152,7 +155,7 @@
 		footer {
 			display: none;
 			flex-direction: column;
-			padding: 16px;
+			padding: 0 16px 32px;
 
 			&.active {
 				display: flex;
@@ -189,7 +192,9 @@
 			}
 
 			.valider {
-				display: block;
+				display: flex;
+				gap: 16px;
+				justify-content: center;
 				border: none;
 				background-color: #2461ae;
 				color: white;
@@ -215,4 +220,18 @@
 		grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
 		gap: 16px;
 	}
+
+  .svg-spinners--gooey-balls-2 {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cfilter id='svgSpinnersGooeyBalls20'%3E%3CfeGaussianBlur in='SourceGraphic' result='y' stdDeviation='1'/%3E%3CfeColorMatrix in='y' result='z' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7'/%3E%3CfeBlend in='SourceGraphic' in2='z'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23svgSpinnersGooeyBalls20)'%3E%3Ccircle cx='5' cy='12' r='4' fill='%23000'%3E%3Canimate attributeName='cx' calcMode='spline' dur='2s' keySplines='.36,.62,.43,.99;.79,0,.58,.57' repeatCount='indefinite' values='5;8;5'/%3E%3C/circle%3E%3Ccircle cx='19' cy='12' r='4' fill='%23000'%3E%3Canimate attributeName='cx' calcMode='spline' dur='2s' keySplines='.36,.62,.43,.99;.79,0,.58,.57' repeatCount='indefinite' values='19;16;19'/%3E%3C/circle%3E%3CanimateTransform attributeName='transform' dur='0.75s' repeatCount='indefinite' type='rotate' values='0 12 12;360 12 12'/%3E%3C/g%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
 </style>

@@ -40,7 +40,13 @@
     display: none;
 
     &.visible {
-      display: block;
+			display: block;
+      animation: fadein 0.7s;
+    }
+
+    @keyframes fadein {
+      from {top: -30px; opacity: 0;}
+      to {top: 0; opacity: 1;}
     }
 
     .notification {
