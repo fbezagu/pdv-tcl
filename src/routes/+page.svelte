@@ -29,11 +29,27 @@
 	};
 
 	const valider = async () => {
-		envoiEnCours = true;
-		await fetch('/ventes', { method: 'POST', body: panierSerialise() });
-		envoiEnCours = false;
-		toastSucces.affiche();
-		videPanier();
+		try {
+			envoiEnCours = true;
+			const token = localStorage.getItem('authToken');
+			if (!token) {
+				goto('/login');
+				return;
+			}
+			let reponse = await fetch('/ventes', {
+				method: 'POST',
+				body: panierSerialise(),
+				headers: { Authorization: `Bearer ${token}` }
+			});
+			if (reponse.status === 200) {
+				toastSucces.affiche();
+				videPanier();
+			} else if (reponse.status === 401) {
+				goto('/login');
+			}
+		} finally {
+			envoiEnCours = false;
+		}
 	};
 
 	const vider = () => {
@@ -76,7 +92,6 @@
 	});
 
 	const logout = () => {
-		localStorage.removeItem('authToken');
 		goto('/login');
 	};
 </script>
@@ -131,14 +146,6 @@
       color: #222;
       padding: 0;
       margin: 0;
-    }
-  }
-
-  .succes {
-    display: none;
-
-    &.afficheSucces {
-      display: block;
     }
   }
 
