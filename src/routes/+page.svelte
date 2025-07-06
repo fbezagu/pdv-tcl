@@ -13,16 +13,13 @@
 	import TuileArticle from '$lib/TuileArticle.svelte';
 	import { chargeArticles } from '$lib/articles';
 	import Toast from '$lib/Toast.svelte';
+	import { enEuros } from '$lib/monnaie';
 
 	let articles: Article[] = $state([]);
 
 	let articlesCharges = $state(false);
 	let envoiEnCours = $state(false);
 	let toastSucces: Toast;
-
-	const enEuros = (montant: number) => {
-		return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(montant);
-	};
 
 	const totalPanier = () => {
 		return articles.reduce((acc: number, article: Article) => {

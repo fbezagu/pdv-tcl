@@ -33,9 +33,9 @@
     margin: 2px;
 
     &.actif {
-      color: #2b2bd5;
-      border: 1px solid #2b2bd5;
-      outline: 1px solid #2b2bd5;
+      color: #2461ae;
+      border: 1px solid #2461ae;
+      outline: 1px solid #2461ae;
       box-shadow: 0 5px 10px 0 rgb(43, 43, 213, 30%);
     }
 
