@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Login from '$lib/Login.svelte';
+	import Inscription from '$lib/Inscription.svelte';
 </script>
 
 <main>
-	<h1>Connexion</h1>
-	<Login />
+	<h1>Inscription</h1>
+	<Inscription />
 	<div>
-		Pas encore de compte ? <a href="/inscription">S’inscrire</a>
+		Déjà un compte ? <a href="/login">Se connecter</a>
 	</div>
 </main>
 

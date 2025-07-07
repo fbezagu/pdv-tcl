@@ -7,3 +7,5 @@ export interface Article {
 	actif: boolean;
 	modesPaiementAutorises: IdModePaiement[];
 }
+
+export type InformationsConnexion = { login: string; motDePasse: string };

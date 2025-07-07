@@ -1,9 +1,10 @@
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
+import type { InformationsConnexion } from '$lib/types';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const donneesConnexion = (await request.json()) as { login: string; motDePasse: string };
+	const donneesConnexion = (await request.json()) as InformationsConnexion;
 	const { login } = donneesConnexion;
 
 	if (login === 'fabien') {
