@@ -7,12 +7,16 @@
 	let login = $state('');
 	let motDePasse = $state('');
 	let erreurConnexion: string | null = $state(null);
+	let envoiEnCours = $state(false);
 
 	onMount(() => {
 		localStorage.removeItem('authToken');
 	});
 
-	const connecte = async () => {
+	const connecte = async (event: SubmitEvent) => {
+		event.preventDefault();
+		envoiEnCours = true;
+		erreurConnexion = null;
 		const reponse = await fetch('/login', {
 			method: 'POST',
 			body: JSON.stringify({ login, motDePasse })
@@ -24,13 +28,19 @@
 		} else {
 			erreurConnexion = (await reponse.json()).message;
 		}
+		envoiEnCours = false;
 	};
 </script>
 
 <form onsubmit={connecte}>
-	<Champ libelle="Login" bind:valeur={login}></Champ>
-	<Champ libelle="Mot de passe" bind:valeur={motDePasse} type="password"></Champ>
-	<Bouton libelle="Se connecter"/>
+	<Champ libelle="Login" bind:valeur={login} name="login"></Champ>
+	<Champ
+		libelle="Mot de passe"
+		bind:valeur={motDePasse}
+		type="password"
+		autocomplete="current-password"
+	></Champ>
+	<Bouton libelle="Se connecter" bind:envoiEnCours />
 	{#if erreurConnexion}
 		<p class="erreur">{erreurConnexion}</p>
 	{/if}
