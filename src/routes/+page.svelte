@@ -15,6 +15,7 @@
 	import Toast from '$lib/Toast.svelte';
 	import { enEuros } from '$lib/monnaie';
 	import { goto } from '$app/navigation';
+	import Bouton from '$lib/Bouton.svelte';
 
 	let articles: Article[] = $state([]);
 
@@ -76,7 +77,7 @@
 		articlesCharges = true;
 	});
 
-	let nonValide = $derived(!modePaiement.courant);
+	let valide = $derived(!!modePaiement.courant);
 
 	const articlesAutorises = $derived.by(() => {
 		const mode = modePaiement.courant;
@@ -103,8 +104,9 @@
 
 <div class="conteneur">
 	<header>
-		Salut {idUtilisateur} !
-		<button onclick={logout}>Déconnecter</button>
+		<span class="icone"></span>
+		<span>{idUtilisateur}</span>
+		<button class="deconnexion" onclick={logout} title="Se déconnecter">Se déconnecter</button>
 	</header>
 	<main class:active={articlesCharges}>
 		<Toast
@@ -126,15 +128,12 @@
 		<button class="vider" onclick={vider} aria-label="Vider le panier" title="Vider le panier"
 		><span class="icone"></span></button
 		>
-		<button class="valider" onclick={valider} disabled={envoiEnCours || nonValide}>
+		<Bouton bind:envoiEnCours bind:actif={valide} onclick={valider}>
 			Envoyer
 			{#if totalPanier() > 0}
 				({enEuros(totalPanier())})
 			{/if}
-			{#if envoiEnCours}
-				<span class="svg-spinners--gooey-balls-2"></span>
-			{/if}
-		</button>
+		</Bouton>
 	</footer>
 </div>
 
@@ -168,6 +167,53 @@
   }
 
   .conteneur {
+    header {
+      position: sticky;
+      top: 0;
+      height: 24px;
+      background: white;
+      z-index: 50;
+      box-shadow: 0 3px 22px -10px #919191;
+      display: flex;
+      padding: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+
+      span {
+        height: fit-content;
+      }
+
+      .icone {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19.652 19.405c.552-.115.882-.693.607-1.187c-.606-1.087-1.56-2.043-2.78-2.771C15.907 14.509 13.98 14 12 14s-3.907.508-5.479 1.447c-1.22.728-2.174 1.684-2.78 2.771c-.275.494.055 1.072.607 1.187a37.5 37.5 0 0 0 15.303 0'/%3E%3Ccircle cx='12' cy='8' r='5' fill='%23000'/%3E%3C/svg%3E");
+        background-color: currentColor;
+        -webkit-mask-image: var(--svg);
+        mask-image: var(--svg);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+      }
+
+      .deconnexion {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h6q.425 0 .713.288T12 4t-.288.713T11 5H5v14h6q.425 0 .713.288T12 20t-.288.713T11 21zm12.175-8H10q-.425 0-.712-.288T9 12t.288-.712T10 11h7.175L15.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L20.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288t-.713-.313q-.275-.3-.262-.712t.287-.688z'/%3E%3C/svg%3E");
+        background-color: currentColor;
+        -webkit-mask-image: var(--svg);
+        mask-image: var(--svg);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+				cursor: pointer;
+      }
+    }
+
     main {
       display: none;
       padding: 16px;
@@ -219,28 +265,6 @@
           mask-size: 100% 100%;
         }
       }
-
-      .valider {
-        display: flex;
-        gap: 16px;
-        justify-content: center;
-        border: none;
-        background-color: #2461ae;
-        color: white;
-        padding: 20px;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 18px;
-
-        &:hover:not(&[disabled]) {
-          opacity: 90%;
-        }
-
-        &[disabled] {
-          background-color: #888;
-          cursor: not-allowed;
-        }
-      }
     }
   }
 
@@ -250,17 +274,4 @@
     gap: 16px;
   }
 
-  .svg-spinners--gooey-balls-2 {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cfilter id='svgSpinnersGooeyBalls20'%3E%3CfeGaussianBlur in='SourceGraphic' result='y' stdDeviation='1'/%3E%3CfeColorMatrix in='y' result='z' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7'/%3E%3CfeBlend in='SourceGraphic' in2='z'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23svgSpinnersGooeyBalls20)'%3E%3Ccircle cx='5' cy='12' r='4' fill='%23000'%3E%3Canimate attributeName='cx' calcMode='spline' dur='2s' keySplines='.36,.62,.43,.99;.79,0,.58,.57' repeatCount='indefinite' values='5;8;5'/%3E%3C/circle%3E%3Ccircle cx='19' cy='12' r='4' fill='%23000'%3E%3Canimate attributeName='cx' calcMode='spline' dur='2s' keySplines='.36,.62,.43,.99;.79,0,.58,.57' repeatCount='indefinite' values='19;16;19'/%3E%3C/circle%3E%3CanimateTransform attributeName='transform' dur='0.75s' repeatCount='indefinite' type='rotate' values='0 12 12;360 12 12'/%3E%3C/g%3E%3C/svg%3E");
-    background-color: currentColor;
-    -webkit-mask-image: var(--svg);
-    mask-image: var(--svg);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-  }
 </style>

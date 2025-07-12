@@ -35,7 +35,7 @@
     left: 0;
     width: 100%;
     padding: 16px;
-    z-index: 10;
+    z-index: 100;
     box-sizing: border-box;
     display: none;
 
