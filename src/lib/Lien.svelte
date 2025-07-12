@@ -3,18 +3,19 @@
 
 	let {
 		libelle = undefined,
+		apparence = 'lien',
 		actif = $bindable(true),
 		envoiEnCours = $bindable(),
 		children,
-		onclick = undefined,
 		variante = 'primaire',
 		taille = 'lg',
 		id = undefined,
-		icone = undefined
+		icone = undefined,
+		href
 	} = $props();
 </script>
 
-<button {id} disabled={!actif || envoiEnCours} {onclick} class={`bouton ${variante} ${taille}`}>
+<a {href} {id} class={`${apparence} ${variante} ${taille}`}>
 	{#if icone}
 		<Icone {icone} taille="sm" />
 	{/if}
@@ -27,8 +28,12 @@
 	{#if envoiEnCours}
 		<Icone icone="gooey-balls" {taille} />
 	{/if}
-</button>
+</a>
 
 <style lang="scss">
   @import "apparence-bouton";
+
+  .bouton {
+    text-decoration: none;
+  }
 </style>

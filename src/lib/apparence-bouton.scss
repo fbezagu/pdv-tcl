@@ -1,0 +1,45 @@
+.bouton {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+
+  &.primaire {
+    border: none;
+    color: white;
+    background-color: #2461ae;
+
+    &:hover:not(&[disabled]) {
+      opacity: 90%;
+    }
+  }
+
+  &.secondaire {
+    background-color: white;
+    color: #1e1e1e;
+    border: 1px solid #ddd;
+
+    &:hover:not(&[disabled]) {
+      background-color: #efefef;
+    }
+  }
+
+  &.sm {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+  }
+
+  &.lg {
+    font-weight: bold;
+    padding: 12px;
+    font-size: 18px;
+  }
+
+
+  &[disabled] {
+    background-color: #888;
+    cursor: not-allowed;
+  }
+}
