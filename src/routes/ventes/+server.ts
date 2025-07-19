@@ -1,9 +1,9 @@
 import type { RequestHandler } from './$types';
-import { error, text } from '@sveltejs/kit';
-import axios from 'axios';
+import { error, json, text } from '@sveltejs/kit';
 import { v4 as uuidv4 } from 'uuid';
 import { env } from '$env/dynamic/private';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
+import { entrepotVentesGSheet } from '$lib/entrepotVentesGSheet';
 
 export const POST: RequestHandler = async ({ request }) => {
 	let idUtilisateur: string | null;
@@ -18,31 +18,21 @@ export const POST: RequestHandler = async ({ request }) => {
 		throw error(401, 'Le jeton a expiré');
 	}
 
-	const urlApiFeuille = `${env.STEINHQ_URL}TableVentes`;
-
-	const date = new Date();
-	const idPanier = uuidv4();
-
 	const panier = await request.json();
-	const { articles, mode } = panier;
-	const ventes = Object.keys(articles)
-		.filter((idArticle) => articles[idArticle] > 0)
-		.map((idArticle) => ({
-			id: idArticle,
-			quantite: articles[idArticle],
-			idPanier,
-			date,
-			mode,
-			idUtilisateur
-		}));
 
-	if (ventes.length > 0) {
-		await axios.post(urlApiFeuille, ventes, {
-			auth: {
-				username: env.STEINHQ_UTILISATEUR,
-				password: env.STEINHQ_MOT_PASSE
-			}
-		});
-	}
+	const vente = {
+		articles: panier.articles,
+		idPanier: uuidv4(),
+		date: new Date(),
+		mode: panier.mode,
+		idUtilisateur
+	};
+
+	await entrepotVentesGSheet().ajoute(vente);
+
 	return text('ok');
+};
+
+export const GET: RequestHandler = async () => {
+	return json(await entrepotVentesGSheet().toutes());
 };
