@@ -1,6 +1,6 @@
 import type { Article } from '$lib/types';
 
-const DEMO = true;
+const DEMO = false;
 
 export const chargeArticles = async (): Promise<Article[]> => {
 	if (DEMO) {

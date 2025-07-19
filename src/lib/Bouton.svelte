@@ -5,7 +5,7 @@
 		libelle = undefined,
 		actif = $bindable(true),
 		envoiEnCours = $bindable(),
-		children,
+		children = undefined,
 		onclick = undefined,
 		variante = 'primaire',
 		taille = 'lg',

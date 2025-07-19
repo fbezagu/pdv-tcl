@@ -36,7 +36,7 @@
 </script>
 
 <form onsubmit={creeCompte}>
-	<Champ libelle="Login" bind:valeur={login}></Champ>
+	<Champ libelle="Login" bind:valeur={login} autocomplete="off"></Champ>
 	<Champ libelle="Mot de passe" bind:valeur={motDePasse} type="password" autocomplete="new-password"
 				 sousTitre="Au moins 8 caractères"></Champ>
 	<Champ libelle="Confirmation" bind:valeur={confirmationMotDePasse} type="password" autocomplete="new-password"></Champ>
@@ -58,7 +58,7 @@
 		<p class="source">
 			<a
 				href="https://cyber.gouv.fr/publications/recommandations-relatives-lauthentification-multifacteur-et-aux-mots-de-passe"
-				target="_blank">source</a>
+				target="_blank">(source)</a>
 		</p>
 	</div>
 </form>
@@ -95,8 +95,9 @@
     }
 
     .source {
-      margin: 0;
-      font-size: 12px;
+      margin: 16px 0 0 auto;
+      font-size: 10px;
+			width: fit-content;
     }
   }
 </style>
