@@ -4,14 +4,13 @@
 	import { onMount } from 'svelte';
 	import ModesPaiement from '$lib/ModesPaiement.svelte';
 	import TuileArticle from '$lib/TuileArticle.svelte';
-	import { chargeArticles } from '$lib/articles';
 	import Toast from '$lib/Toast.svelte';
 	import { enEuros } from '$lib/monnaie';
 	import { goto } from '$app/navigation';
 	import Bouton from '$lib/Bouton.svelte';
-	import Icone from '$lib/Icone.svelte';
-	import Lien from '$lib/Lien.svelte';
 	import Chargement from '$lib/Chargement.svelte';
+	import { chargeArticles } from '$lib/servicesBack';
+	import Entete from '$lib/Entete.svelte';
 
 	let articles: Article[] = $state([]);
 
@@ -53,22 +52,7 @@
 		videPanier();
 	};
 
-	let idUtilisateur: string | null = $state(null);
-
 	onMount(async () => {
-		const token = localStorage.getItem('authToken');
-		if (!token) {
-			goto('/login');
-			return;
-		}
-		const reponse = await fetch('/moi', { headers: { Authorization: `Bearer ${token}` } });
-		if (reponse.status === 401) {
-			goto('/login');
-			return;
-		}
-		const infos = await reponse.json();
-		idUtilisateur = infos.id;
-
 		articles = await chargeArticles();
 		articlesCharges = true;
 	});
@@ -87,25 +71,12 @@
 			.filter((a) => !a.modesPaiementAutorises.includes(mode))
 			.forEach((a) => videDuPanier(a.id));
 	});
-
-	const logout = () => {
-		goto('/login');
-	};
 </script>
 
 <Chargement active={!articlesCharges} message="Chargement des articles…"></Chargement>
 
 <div class="conteneur" class:active={articlesCharges}>
-	<header>
-		<Lien href="/historique" apparence="bouton" variante="secondaire" taille="sm" icone="horloge">
-			Historique
-		</Lien>
-		<div class="utilisateur">
-			<Icone icone="utilisateur" taille="md" />
-			<span>{idUtilisateur}</span>
-			<button class="deconnexion" onclick={logout} title="Se déconnecter">Se déconnecter</button>
-		</div>
-	</header>
+	<Entete courant="panier"/>
 	<main>
 		<Toast
 			titre="Panier envoyé"
@@ -151,46 +122,6 @@
 
     &.active {
       display: block;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      height: 24px;
-      background: white;
-      z-index: 50;
-      box-shadow: 0 3px 22px -10px #919191;
-      display: flex;
-      padding: 8px;
-      align-items: center;
-      gap: 8px;
-      justify-content: space-between;
-
-      .utilisateur {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: flex-end;
-      }
-
-      span {
-        height: fit-content;
-      }
-
-      .deconnexion {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h6q.425 0 .713.288T12 4t-.288.713T11 5H5v14h6q.425 0 .713.288T12 20t-.288.713T11 21zm12.175-8H10q-.425 0-.712-.288T9 12t.288-.712T10 11h7.175L15.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L20.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288t-.713-.313q-.275-.3-.262-.712t.287-.688z'/%3E%3C/svg%3E");
-        background-color: currentColor;
-        -webkit-mask-image: var(--svg);
-        mask-image: var(--svg);
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        -webkit-mask-size: 100% 100%;
-        mask-size: 100% 100%;
-        cursor: pointer;
-      }
     }
 
     main {

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { chargeArticles } from '$lib/articles';
 	import type { Article } from '$lib/types';
 	import { enEuros } from '$lib/monnaie';
 	import Tag from '$lib/Tag.svelte';
 	import Icone from '$lib/Icone.svelte';
 	import Chargement from '$lib/Chargement.svelte';
+	import { chargeArticles, chargeVentes } from '$lib/servicesBack';
+	import Entete from '$lib/Entete.svelte';
 
 	type Vente = {
 		idPanier: string;
@@ -24,9 +25,8 @@
 	onMount(async () => {
 		chargement = true;
 		articles = await chargeArticles();
+		ventes = await chargeVentes();
 
-		const reponse = await fetch('/ventes', { method: 'GET' });
-		ventes = await reponse.json();
 		ventesParJour = ventes.reduce((acc: VentesParJour, vente: Vente) => {
 			const date = new Date(vente.date);
 			const jour = date.toISOString().slice(0, 10);
@@ -69,34 +69,37 @@
 </script>
 
 <Chargement active={chargement} message="Chargement des ventes" />
-<main class:active={!chargement}>
-	<h1>Historique des ventes</h1>
+<div class="conteneur" class:active={!chargement}>
+	<Entete courant="historique"/>
+	<main>
+		<h1>Historique des ventes</h1>
 
-	{#each jours as jour (jour)}
-		<h2>{formateJour(jour)}</h2>
-		<div class="ventes">
-			{#each ventesParJourTriees(jour) as vente (vente.idPanier)}
-				<div class="vente">
-					<div class="mode">
-						<Icone icone={vente.mode} taille="md"></Icone>
-						<span>{vente.mode}</span>
-					</div>
-					<div class="details">
-						<span class="montant">{enEuros(montant(vente))}</span>
-						<span class="heure">{heure(vente.date)}</span>
-						<div class="articles">
-							{#each Object.keys(vente.articles) as idArticle, index (index)}
-								<Tag>
-									{vente.articles[idArticle]} x {nomArticle(idArticle)}
-								</Tag>
-							{/each}
+		{#each jours as jour (jour)}
+			<h2>{formateJour(jour)}</h2>
+			<div class="ventes">
+				{#each ventesParJourTriees(jour) as vente (vente.idPanier)}
+					<div class="vente">
+						<div class="mode">
+							<Icone icone={vente.mode} taille="md"></Icone>
+							<span>{vente.mode}</span>
+						</div>
+						<div class="details">
+							<span class="montant">{enEuros(montant(vente))}</span>
+							<span class="heure">{heure(vente.date)}</span>
+							<div class="articles">
+								{#each Object.keys(vente.articles) as idArticle, index (index)}
+									<Tag>
+										{vente.articles[idArticle]} x {nomArticle(idArticle)}
+									</Tag>
+								{/each}
+							</div>
 						</div>
 					</div>
-				</div>
-			{/each}
-		</div>
-	{/each}
-</main>
+				{/each}
+			</div>
+		{/each}
+	</main>
+</div>
 
 <style lang="css">
     :global {
@@ -109,13 +112,16 @@
         }
     }
 
-    main {
-        padding: 16px;
+    .conteneur {
         display: none;
 
         &.active {
             display: block;
         }
+    }
+
+    main {
+        padding: 16px;
     }
 
     .ventes {
