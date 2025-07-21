@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { modePaiement, panierSerialise, quantiteDansPanier, videDuPanier, videPanier } from '$lib/panier.svelte';
+	import {
+		estPanierVide,
+		modePaiement,
+		panierSerialise,
+		quantiteDansPanier,
+		videDuPanier,
+		videPanier
+	} from '$lib/panier.svelte';
 	import type { Article } from '$lib/types';
 	import { onMount } from 'svelte';
 	import ModesPaiement from '$lib/ModesPaiement.svelte';
@@ -11,6 +18,7 @@
 	import Chargement from '$lib/Chargement.svelte';
 	import { chargeArticles } from '$lib/servicesBack';
 	import Entete from '$lib/Entete.svelte';
+	import Icone from '$lib/Icone.svelte';
 
 	let articles: Article[] = $state([]);
 
@@ -57,7 +65,9 @@
 		articlesCharges = true;
 	});
 
-	let valide = $derived(!!modePaiement.courant);
+	let pasVide = $derived(!estPanierVide());
+
+	let valide = $derived(!!modePaiement.courant && pasVide);
 
 	const articlesAutorises = $derived.by(() => {
 		const mode = modePaiement.courant;
@@ -86,24 +96,23 @@
 		<section>
 			<ModesPaiement />
 		</section>
+		<section class="actions">
+			<Bouton bind:envoiEnCours bind:actif={valide} onclick={valider} id="envoyer">
+				Envoyer
+				{#if totalPanier() > 0}
+					({enEuros(totalPanier())})
+				{/if}
+			</Bouton>
+			<Bouton onclick={vider} title="Vider le panier" variante="danger" bind:actif={pasVide}>
+				<Icone icone="poubelle" taille="md" />
+			</Bouton>
+		</section>
 		<section class="articles">
 			{#each articlesAutorises as article (article.id)}
 				<TuileArticle {article} />
 			{/each}
 		</section>
 	</main>
-
-	<footer>
-		<button class="vider" onclick={vider} aria-label="Vider le panier" title="Vider le panier"
-		><span class="icone"></span></button
-		>
-		<Bouton bind:envoiEnCours bind:actif={valide} onclick={valider}>
-			Envoyer
-			{#if totalPanier() > 0}
-				({enEuros(totalPanier())})
-			{/if}
-		</Bouton>
-	</footer>
 </div>
 
 <style lang="scss">
@@ -126,46 +135,24 @@
 
     main {
       padding: 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
     }
 
     section {
       width: 100%;
     }
 
-    footer {
+    .actions {
       display: flex;
-      flex-direction: column;
-      padding: 0 16px 32px;
+      flex-direction: row;
+			gap: 8px;
+			width: 100%;
 
-      .vider {
-        margin: 20px;
-        align-self: end;
-        width: 36px;
-        height: 36px;
-        border-radius: 18px;
-        border: none;
-        background-color: #ae1e18;
-        color: white;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #d7130b;
-        }
-
-        .icone {
-          display: inline-block;
-          width: 24px;
-          height: 24px;
-          --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z'/%3E%3C/svg%3E");
-          background-color: currentColor;
-          -webkit-mask-image: var(--svg);
-          mask-image: var(--svg);
-          -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-          -webkit-mask-size: 100% 100%;
-          mask-size: 100% 100%;
-        }
-      }
+			:global(#envoyer){
+				flex: 1;
+			}
     }
   }
 

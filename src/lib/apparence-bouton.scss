@@ -15,6 +15,16 @@
     }
   }
 
+  &.danger {
+    border: none;
+    color: white;
+    background-color: #cc0f0f;
+
+    &:hover:not(&[disabled]) {
+      opacity: 90%;
+    }
+  }
+
   &.secondaire {
     background-color: white;
     color: #1e1e1e;

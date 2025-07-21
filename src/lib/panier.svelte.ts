@@ -20,6 +20,10 @@ export const videPanier = () => {
 	modePaiement.courant = undefined
 };
 
+export const estPanierVide =()=>{
+	return !Object.values(panier).some(value => value>0);
+}
+
 export const modesPaiement: Record<IdModePaiement, string> = {
 	CB: 'Carte bleue',
 	ESP: 'Espèces',

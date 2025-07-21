@@ -30,7 +30,7 @@
 <header>
 	{#if courant !== "panier"}
 		<Lien href="/" apparence="bouton" variante="secondaire" taille="sm" icone="panier">
-			Panier
+			Vente
 		</Lien>
 	{/if}
 	{#if courant !== "historique"}

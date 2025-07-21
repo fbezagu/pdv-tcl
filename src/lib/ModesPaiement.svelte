@@ -16,7 +16,6 @@
   .modes-paiement {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
   }
 
   label {
