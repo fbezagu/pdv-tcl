@@ -7,8 +7,8 @@
 		libelle?: string;
 		actif?: boolean;
 		envoiEnCours?: boolean;
-		children?: Snippet<[]> ;
-		onclick?: (() => void) ;
+		children?: Snippet<[]>;
+		onclick?: (() => void);
 		variante?: 'primaire' | 'danger';
 		taille?: 'lg';
 		icone?: string;
@@ -26,6 +26,8 @@
 		icone = undefined,
 		...autres
 	}: Props = $props();
+
+	const tailleIcone = $derived.by(() => taille === 'lg' ? 'md' : 'sm');
 </script>
 
 <button
@@ -36,7 +38,7 @@
 	{...autres}
 >
 	{#if icone}
-		<Icone {icone} taille="sm" />
+		<Icone {icone} taille={tailleIcone} />
 	{/if}
 	{#if libelle}
 		{libelle}
@@ -45,7 +47,7 @@
 	{/if}
 
 	{#if envoiEnCours}
-		<Icone icone="gooey-balls" {taille} />
+		<Icone icone="gooey-balls" taille={tailleIcone} />
 	{/if}
 </button>
 
