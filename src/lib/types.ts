@@ -5,6 +5,7 @@ export interface Article {
 	prix: number;
 	nom: string;
 	actif: boolean;
+	icone?:string;
 	modesPaiementAutorises: IdModePaiement[];
 }
 

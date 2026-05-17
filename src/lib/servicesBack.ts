@@ -10,6 +10,7 @@ export const chargeArticles = async (): Promise<Article[]> => {
 				nom: 'Bière',
 				prix: 2,
 				actif: true,
+				icone: 'ri-beer-line',
 				modesPaiementAutorises: ['CHQ', 'CB', 'CARTB', 'ESP']
 			},
 			{

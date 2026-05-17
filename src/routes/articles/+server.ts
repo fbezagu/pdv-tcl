@@ -7,6 +7,7 @@ type ArticleGSheet = {
 	Id: string;
 	Nom: string;
 	Prix: string;
+	Icone:string;
 	Compte: string;
 	Actif: string;
 	CHQ: string;
@@ -40,6 +41,7 @@ export const GET: RequestHandler = async () => {
 		.map((source) => ({
 			id: source.Id,
 			nom: source.Nom,
+			icone: source.Icone,
 			prix: parseInt(source.Prix.slice(0, -1)),
 			actif: source.Actif === 'TRUE',
 			modesPaiementAutorises: modesPaiementAutorises(source)
