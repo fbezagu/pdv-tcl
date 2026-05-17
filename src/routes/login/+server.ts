@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const utilisateur = await entrepotUtilisateursGSheet().parLogin(login);
 
 	if (utilisateur && (await bcrypt.compare(motDePasse, utilisateur.motDePasse))) {
-		const token = jwt.sign({ id: login }, env.SECRET_JWT, { expiresIn: '5m' });
+		const token = jwt.sign({ id: login }, env.SECRET_JWT, { expiresIn: '2h' });
 		return json({ token });
 	}
 	throw error(401, 'Utilisateur ou mot de passe invalide');
