@@ -81,12 +81,14 @@
 			.filter((a) => !a.modesPaiementAutorises.includes(mode))
 			.forEach((a) => videDuPanier(a.id));
 	});
+
+	const modesPaiementPossible = $derived([...new Set(articles.flatMap(a => (a.modesPaiementAutorises)))]);
 </script>
 
 <Chargement active={!articlesCharges} message="Chargement des articles…"></Chargement>
 
 <div class="conteneur" class:active={articlesCharges}>
-	<Entete courant="panier"/>
+	<Entete courant="panier" />
 	<main>
 		<Toast
 			titre="Panier envoyé"
@@ -94,7 +96,7 @@
 			bind:this={toastSucces}
 		/>
 		<section>
-			<ModesPaiement />
+			<ModesPaiement {modesPaiementPossible}/>
 		</section>
 		<section class="actions">
 			<Bouton bind:envoiEnCours bind:actif={valide} onclick={valider} id="envoyer">
@@ -135,9 +137,9 @@
 
     main {
       padding: 16px;
-			display: flex;
-			flex-direction: column;
-			gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
     section {
@@ -147,12 +149,12 @@
     .actions {
       display: flex;
       flex-direction: row;
-			gap: 8px;
-			width: 100%;
+      gap: 8px;
+      width: 100%;
 
-			:global(#envoyer){
-				flex: 1;
-			}
+      :global(#envoyer) {
+        flex: 1;
+      }
     }
   }
 

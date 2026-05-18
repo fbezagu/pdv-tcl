@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { modePaiement, modesPaiement } from '$lib/panier.svelte';
 	import Icone from '$lib/Icone.svelte';
+
+	const { modesPaiementPossible }: { modesPaiementPossible: string[] } = $props();
 </script>
 <div class="modes-paiement">
 	{#each Object.entries(modesPaiement) as [id, libelle] (id)}
-		<label class:actif={modePaiement.courant === id}>
-			<Icone icone={id} taille="md"></Icone>
-			<input type="radio" value={id} bind:group={modePaiement.courant} />
-			{libelle}
-		</label>
+		{#if modesPaiementPossible.includes(id)}
+			<label class:actif={modePaiement.courant === id}>
+				<Icone icone={id} taille="md"></Icone>
+				<input type="radio" value={id} bind:group={modePaiement.courant} />
+				{libelle}
+			</label>
+		{/if}
 	{/each}
 </div>
 
