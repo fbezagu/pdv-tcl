@@ -28,7 +28,8 @@ export const modesPaiement: Record<IdModePaiement, string> = {
 	CB: 'Carte bleue',
 	ESP: 'Espèces',
 	CHQ: 'Chèque',
-	CARTB: 'Carte boisson'
+	CARTB: 'Carte boisson',
+	OFF:'Offert'
 };
 
 export const modePaiement = $state({ courant: undefined });

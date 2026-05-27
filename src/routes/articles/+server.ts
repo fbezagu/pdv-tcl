@@ -14,10 +14,11 @@ type ArticleGSheet = {
 	CB: string;
 	ESP: string;
 	CARTB: string;
+	OFF:string;
 };
 
-type ModePaiement = 'ESP' | 'CHQ' | 'CARTB' | 'CB';
-const modesPaiement: ModePaiement[] = ['CHQ', 'CB', 'CARTB', 'ESP'];
+type ModePaiement = 'ESP' | 'CHQ' | 'CARTB' | 'CB' |'OFF';
+const modesPaiement: ModePaiement[] = ['CHQ', 'CB', 'CARTB', 'ESP', 'OFF'];
 
 export const GET: RequestHandler = async () => {
 	const urlApiFeuille = `${env.STEINHQ_URL}Articles`;

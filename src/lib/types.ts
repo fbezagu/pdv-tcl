@@ -1,4 +1,4 @@
-export type IdModePaiement = 'CB' | 'CHQ' | 'ESP' | 'CARTB';
+export type IdModePaiement = 'CB' | 'CHQ' | 'ESP' | 'CARTB'|'OFF';
 
 export interface Article {
 	id: string;
