@@ -1,9 +1,9 @@
 <script lang="ts">
 	import {
 		estPanierVide,
-		modePaiement,
+		modePaiement, nombreArticlesDansPanier,
 		panierSerialise,
-		quantiteDansPanier,
+		quantiteDansPanier, totalPanier,
 		videDuPanier,
 		videPanier
 	} from '$lib/panier.svelte';
@@ -25,12 +25,6 @@
 	let articlesCharges = $state(false);
 	let envoiEnCours = $state(false);
 	let toastSucces: Toast;
-
-	const totalPanier = () => {
-		return articles.reduce((acc: number, article: Article) => {
-			return acc + article.prix * quantiteDansPanier(article.id);
-		}, 0);
-	};
 
 	const valider = async () => {
 		try {
@@ -101,8 +95,8 @@
 		<section class="actions">
 			<Bouton bind:envoiEnCours bind:actif={valide} onclick={valider} id="envoyer">
 				Envoyer
-				{#if totalPanier() > 0}
-					({enEuros(totalPanier())})
+				{#if nombreArticlesDansPanier(articles) > 0}
+					({enEuros(totalPanier(articles))})
 				{/if}
 			</Bouton>
 			<Bouton onclick={vider} title="Vider le panier" variante="danger" bind:actif={pasVide}>

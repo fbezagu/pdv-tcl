@@ -1,4 +1,5 @@
-import type { IdModePaiement } from '$lib/types';
+import type {Article, IdModePaiement} from '$lib/types';
+import {goto} from "$app/navigation";
 
 let panier: { [idArticle: string]: number } = $state({});
 
@@ -33,3 +34,19 @@ export const modesPaiement: Record<IdModePaiement, string> = {
 };
 
 export const modePaiement = $state({ courant: undefined });
+
+export const prixUnitaireArticle = (article: Article) => {
+	return modePaiement.courant === "OFF" ? 0 : article.prix;
+}
+
+export const totalPanier = (articles:Article[]) => {
+	return articles.reduce((acc: number, article: Article) => {
+		return acc + prixUnitaireArticle(article) * quantiteDansPanier(article.id);
+	}, 0);
+};
+
+export const nombreArticlesDansPanier=(articles:Article[]) => {
+	return articles.reduce((acc: number, article: Article) => {
+		return acc + quantiteDansPanier(article.id);
+	}, 0);
+}
